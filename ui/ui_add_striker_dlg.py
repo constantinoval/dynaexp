@@ -1,7 +1,7 @@
 import PySide6.QtWidgets as pqw
 import PySide6.QtCore as pqc
 from ui.add_striker_dlg import Ui_Dialog_Add_Striker
-from ui.ui_add_elastic_materials_dlg import AddElasticMaterial_Dlg
+from ui.ui_add_elastic_materials_dlg import Add_ElasticMaterial_Dlg
 from libs.datastorage.tables import ElasticProperties, Striker
 from libs.common_tools import to_float
 
@@ -28,7 +28,7 @@ class Add_Striker_Dlg(Ui_Dialog_Add_Striker, pqw.QDialog):
 
     @pqc.Slot()
     def add_material(self):
-        dlg = AddElasticMaterial_Dlg(session=self.session)
+        dlg = Add_ElasticMaterial_Dlg(session=self.session)
         dlg.exec()
         if dlg:
             m = dlg.material

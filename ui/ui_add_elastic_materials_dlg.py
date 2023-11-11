@@ -3,7 +3,7 @@ from ui.add_elastic_material_dlg import Ui_Dialog_add_elastic_material
 from libs.datastorage.tables import ElasticProperties
 from libs.common_tools import to_float
 
-class AddElasticMaterial_Dlg(Ui_Dialog_add_elastic_material, pqw.QDialog):
+class Add_ElasticMaterial_Dlg(Ui_Dialog_add_elastic_material, pqw.QDialog):
     def __init__(self, session, material=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.setupUi(self)

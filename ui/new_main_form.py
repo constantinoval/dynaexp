@@ -145,19 +145,19 @@ class Ui_dynaexp_main_window(object):
 
         self.verticalLayout_5.addWidget(self.bars_btn)
 
-        self.pushButton = QPushButton(self.frame_2)
-        self.pushButton.setObjectName(u"pushButton")
-        self.pushButton.setCheckable(True)
-        self.pushButton.setAutoExclusive(True)
-
-        self.verticalLayout_5.addWidget(self.pushButton)
-
         self.pushButton_6 = QPushButton(self.frame_2)
         self.pushButton_6.setObjectName(u"pushButton_6")
         self.pushButton_6.setCheckable(True)
         self.pushButton_6.setAutoExclusive(True)
 
         self.verticalLayout_5.addWidget(self.pushButton_6)
+
+        self.pushButton = QPushButton(self.frame_2)
+        self.pushButton.setObjectName(u"pushButton")
+        self.pushButton.setCheckable(True)
+        self.pushButton.setAutoExclusive(True)
+
+        self.verticalLayout_5.addWidget(self.pushButton)
 
         self.pushButton_2 = QPushButton(self.frame_2)
         self.pushButton_2.setObjectName(u"pushButton_2")
@@ -412,8 +412,8 @@ class Ui_dynaexp_main_window(object):
         self.elastic_properties_btn.setText(QCoreApplication.translate("dynaexp_main_window", u"\u041c\u0430\u0442\u0435\u0440\u0438\u0430\u043b \u0443\u0441\u0442\u0430\u043d\u043e\u0432\u043a\u0438", None))
         self.strikers_btn.setText(QCoreApplication.translate("dynaexp_main_window", u"\u0423\u0434\u0430\u0440\u043d\u0438\u043a", None))
         self.bars_btn.setText(QCoreApplication.translate("dynaexp_main_window", u"\u041c\u0435\u0440\u043d\u044b\u0439 \u0441\u0442\u0435\u0440\u0436\u0435\u043d\u044c", None))
-        self.pushButton.setText(QCoreApplication.translate("dynaexp_main_window", u"\u0417\u0430\u043a\u0430\u0437\u0447\u0438\u043a", None))
         self.pushButton_6.setText(QCoreApplication.translate("dynaexp_main_window", u"\u041e\u0431\u043e\u0439\u043c\u0430", None))
+        self.pushButton.setText(QCoreApplication.translate("dynaexp_main_window", u"\u0417\u0430\u043a\u0430\u0437\u0447\u0438\u043a", None))
         self.pushButton_2.setText(QCoreApplication.translate("dynaexp_main_window", u"\u041e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0435\u043d\u043d\u044b\u0439", None))
         self.pushButton_3.setText(QCoreApplication.translate("dynaexp_main_window", u"\u041c\u0430\u0442\u0435\u0440\u0438\u0430\u043b", None))
         self.pushButton_4.setText(QCoreApplication.translate("dynaexp_main_window", u"\u041e\u0431\u0440\u0430\u0437\u0435\u0446", None))

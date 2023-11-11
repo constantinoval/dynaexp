@@ -27,3 +27,15 @@ QPushButton:checked{
     font-size: 20px;
     font-weight: bold;
 }
+
+QTableView{
+   gridline-color: grey;
+}
+
+
+QHeaderView::section {
+    background-color: rgba(0, 0, 0, 10);
+    padding-left: 4px;
+    border: 1px solid #6f6e6e;
+    border-radius: 3px;
+}

@@ -279,9 +279,9 @@
                   </widget>
                  </item>
                  <item>
-                  <widget class="QPushButton" name="pushButton">
+                  <widget class="QPushButton" name="pushButton_6">
                    <property name="text">
-                    <string>Заказчик</string>
+                    <string>Обойма</string>
                    </property>
                    <property name="checkable">
                     <bool>true</bool>
@@ -292,9 +292,9 @@
                   </widget>
                  </item>
                  <item>
-                  <widget class="QPushButton" name="pushButton_6">
+                  <widget class="QPushButton" name="pushButton">
                    <property name="text">
-                    <string>Обойма</string>
+                    <string>Заказчик</string>
                    </property>
                    <property name="checkable">
                     <bool>true</bool>

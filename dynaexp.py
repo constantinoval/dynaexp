@@ -4,19 +4,27 @@ import PySide6.QtWidgets as pqw
 import PySide6.QtCore as pqc
 from ui.new_main_form import Ui_dynaexp_main_window
 from libs.datastorage.db_lib import open_session, create_test_database
-# from ui.ui_elastic_materials_dlg import ElasticMaterials_Dlg
-# from ui.ui_strikers_dlg import Strikers_Dlg
 from functools import partial
 from libs.datastorage.tables import ElasticProperties, Striker
 from libs.common_tools import DataModel
+from ui.ui_add_elastic_materials_dlg import Add_ElasticMaterial_Dlg
+from ui.ui_add_striker_dlg import Add_Striker_Dlg
+
 
 class AppMainWindow(Ui_dynaexp_main_window, pqw.QMainWindow):
     def __init__(self, *args, **kwargs):
+        """
+        Инициализации основного окна приложения
+        """
         super().__init__(*args, **kwargs)
         # self.setWindowFlags(pqc.Qt.WindowStaysOnTopHint)
         self.setupUi(self)
-        create_test_database()
+        # TODO: пока работаем с автоматичиски-создаваемой каждый раз таблицей
+        #       в дальнейшем поменять на подключение к заданной базе
+        # -------------------------------------------------------------------
+        # create_test_database()
         self.session = open_session("sqlite:///test.db")
+        # -------------------------------------------------------------------
         self.menu_btn.setChecked(True)
         self.menu_btn.setChecked(False)
         self.data_model = None
@@ -27,10 +35,18 @@ class AppMainWindow(Ui_dynaexp_main_window, pqw.QMainWindow):
         self.elastic_properties_btn.pressed.connect(partial(self.set_table_content, ElasticProperties))
         self.strikers_btn.pressed.connect(partial(self.set_table_content, Striker))
         self.stacked_widget.currentChanged.connect(self.on_mode_changed)
+        self.stacked_widget.setCurrentIndex(0)
+        self.record_delete_btn.pressed.connect(self.delete_record)
+        self.record_add_btn.pressed.connect(self.add_table_record)
+        self.record_edit_btn.pressed.connect(self.edit_table_record)
+        self.table_tview.doubleClicked.connect(self.edit_table_record)
         self.showMaximized()
         # self.show()
 
     def closeEvent(self, event):
+        """
+        Выполняется при закрытии приложения
+        """
         print("Выход...")
         if self.session:
             self.session.close()
@@ -39,7 +55,7 @@ class AppMainWindow(Ui_dynaexp_main_window, pqw.QMainWindow):
     @pqc.Slot()
     def set_table_content(self, table_class):
         """
-        Отображение таблицы из базы данных для отображения в форме
+        Отображение таблицы из базы данных в приложении
         """
         if self.session is None:
             return
@@ -56,11 +72,113 @@ class AppMainWindow(Ui_dynaexp_main_window, pqw.QMainWindow):
 
     @pqc.Slot()
     def on_mode_changed(self, current_index: int):
+        """
+        Обновление заголовка - режим работы приложения при смене вкладок stacke_widget
+        """
         text = {
-            0: "Режим подключения к базе дынных",
+            0: "Режим подключения к базе данных",
             1: "Режим работы с таблицами базы данных",
         }.get(current_index, "")
         self.mode_label.setText(text)
+
+    @pqc.Slot()
+    def delete_record(self):
+        """
+        Удаление выделенной записи из активной таблицы
+        """
+        if self.session is None:
+            return
+        if self.data_model is None:
+            return
+        idx = self.table_tview.selectedIndexes()
+        if not idx:
+            return
+        dlg = pqw.QMessageBox(self)
+        dlg.setWindowTitle("Подтвердите удаление записи")
+        dlg.setText("Удалить запись?")
+        dlg.setStandardButtons(pqw.QMessageBox.Yes | pqw.QMessageBox.No)
+        dlg.setIcon(pqw.QMessageBox.Question)
+        button = dlg.exec()
+        if button == pqw.QMessageBox.No:
+            return
+        row_num = idx[0].row()
+        rec_id = int(self.data_model.records[row_num][0])
+        del self.data_model.records[row_num]
+        self.data_model.layoutChanged.emit()
+        self.session.query(self.data_model.table_class).where(
+            self.data_model.table_class.id == rec_id
+        ).delete()
+        self.session.commit()
+
+    @pqc.Slot()
+    def add_table_record(self):
+        """
+        добавление записи активной таблицы
+        """
+        if self.session is None:
+            return
+        if self.data_model is None:
+            return
+        if self.data_model.table_class == ElasticProperties:
+            dlg = Add_ElasticMaterial_Dlg(
+                parent=self,
+                session=self.session
+            )
+            dlg.exec()
+            if dlg.result():
+                self.data_model.records.append(dlg.material.as_data_record)
+                self.data_model.layoutChanged.emit()
+            return
+        if self.data_model.table_class == Striker:
+            dlg = Add_Striker_Dlg(
+                parent=self,
+                session=self.session
+            )
+            dlg.exec()
+            if dlg.result():
+                self.data_model.records.append(dlg.striker.as_data_record)
+                self.data_model.layoutChanged.emit()
+            return
+
+    @pqc.Slot()
+    def edit_table_record(self):
+        """
+        Редактирование активной записи активной таблицы
+        """
+        if self.session is None:
+            return
+        if self.data_model is None:
+            return
+        idx = self.table_tview.selectedIndexes()
+        if not idx:
+            return
+        row_num = idx[0].row()
+        rec_id = int(self.data_model.records[row_num][0])
+        rec = self.session.query(self.data_model.table_class).where(
+            self.data_model.table_class.id == rec_id
+        ).one()
+        if self.data_model.table_class == ElasticProperties:
+            dlg = Add_ElasticMaterial_Dlg(
+                parent=self,
+                session=self.session,
+                material=rec,
+            )
+            dlg.exec()
+            if dlg.result():
+                self.data_model.records[row_num] = dlg.material.as_data_record
+                self.data_model.layoutChanged.emit()
+            return
+        if self.data_model.table_class == Striker:
+            dlg = Add_Striker_Dlg(
+                parent=self,
+                session=self.session,
+                striker=rec,
+            )
+            dlg.exec()
+            if dlg.result():
+                self.data_model.records[row_num] = dlg.striker.as_data_record
+                self.data_model.layoutChanged.emit()
+            return
 
 
 if __name__ == '__main__':
