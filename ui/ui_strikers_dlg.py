@@ -1,35 +1,9 @@
-import PySide6.QtGui as pqg
 import PySide6.QtWidgets as pqw
 import PySide6.QtCore as pqc
 from libs.datastorage.tables import ElasticProperties, Striker
 from ui.tableView_dlg import Ui_dlg_tableView
 from ui.ui_add_striker_dlg import Add_Striker_Dlg
-
-class DataModel(pqc.QAbstractTableModel):
-    def __init__(self, *args, session, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.session = session
-        self.records = []
-        for s in session.query(Striker).join(Striker.material).all():
-            self.records.append(s.as_data_record)
-
-    def data(self, index, role) -> str:
-        if role == pqc.Qt.ItemDataRole.DisplayRole:
-            return self.records[index.row()][index.column()]
-
-    def headerData(self, section, orientation, role):
-        headers = Striker.data_record_header()
-        if role == pqc.Qt.ItemDataRole.DisplayRole and orientation == pqc.Qt.Orientation.Horizontal:
-            return headers[section]
-        else:
-            return super().headerData(section, orientation, role)
-
-    def rowCount(self, parent):
-        return len(self.records)
-
-    def columnCount(self, parent):
-        return Striker.data_record_columns()
-
+from libs.common_tools import DataModel
 
 class Strikers_Dlg(Ui_dlg_tableView, pqw.QDialog):
     def __init__(self, *args, **kwargs):
@@ -37,7 +11,7 @@ class Strikers_Dlg(Ui_dlg_tableView, pqw.QDialog):
         self.setupUi(self)
         self.setWindowTitle("Ударники")
         self.setMinimumWidth(850)
-        self.model = DataModel(session=self.parent().session)
+        self.model = DataModel(session=self.parent().session, table_class=Striker)
         self.tableView.setModel(self.model)
         horizontalHeader = self.tableView.horizontalHeader()
         for i in range(Striker.data_record_columns()):

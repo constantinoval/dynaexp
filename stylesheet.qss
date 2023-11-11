@@ -1,0 +1,29 @@
+* {
+    font: 12pt;
+}
+QPushButton{
+    text-align: left;
+    padding-left: 4px;
+    color: rgba(0, 0, 0, 0.7);
+    border: none;
+}
+QPushButton:hover{
+    color: black;
+    border-style: solid;
+    border-width: 1px;
+    border-color: darkslategrey;
+    border-radius: 2px;
+}
+#top_bar_frame, #small_menu_frame, #full_menu_frame{
+    background-color: rgba(0, 0, 0, 10);
+}
+QPushButton:checked{
+    border-bottom-width: 3px;
+    border-bottom-color: green;
+    border-bottom-style: solid;
+}
+
+#mode_label{
+    font-size: 20px;
+    font-weight: bold;
+}

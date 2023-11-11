@@ -4,33 +4,7 @@ import PySide6.QtCore as pqc
 from libs.datastorage.tables import ElasticProperties
 from ui.tableView_dlg import Ui_dlg_tableView
 from ui.ui_add_elastic_materials_dlg import AddElasticMaterial_Dlg
-
-
-class DataModel(pqc.QAbstractTableModel):
-    def __init__(self, *args, session, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.session = session
-        self.records = []
-        m: ElasticProperties
-        for m in session.query(ElasticProperties).all():
-            self.records.append(m.as_data_record)
-
-    def data(self, index, role) -> str:
-        if role == pqc.Qt.ItemDataRole.DisplayRole:
-            return self.records[index.row()][index.column()]
-
-    def headerData(self, section, orientation, role):
-        headers = ElasticProperties.data_record_header()
-        if role == pqc.Qt.ItemDataRole.DisplayRole and orientation == pqc.Qt.Orientation.Horizontal:
-            return headers[section]
-        else:
-            return super().headerData(section, orientation, role)
-
-    def rowCount(self, parent):
-        return len(self.records)
-
-    def columnCount(self, parent):
-        return ElasticProperties.data_record_columns()
+from libs.common_tools import DataModel
 
 
 class ElasticMaterials_Dlg(Ui_dlg_tableView, pqw.QDialog):
@@ -38,7 +12,7 @@ class ElasticMaterials_Dlg(Ui_dlg_tableView, pqw.QDialog):
         super().__init__(*args, **kwargs)
         self.setupUi(self)
         self.setWindowTitle("Свойства установки")
-        self.model = DataModel(session=self.parent().session)
+        self.model = DataModel(session=self.parent().session, table_class=ElasticProperties)
         self.tableView.setModel(self.model)
         horizontalHeader = self.tableView.horizontalHeader()
         for i in range(ElasticProperties.data_record_columns()):

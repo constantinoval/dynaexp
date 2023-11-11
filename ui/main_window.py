@@ -16,8 +16,9 @@ from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
     QIcon, QImage, QKeySequence, QLinearGradient,
     QPainter, QPalette, QPixmap, QRadialGradient,
     QTransform)
-from PySide6.QtWidgets import (QApplication, QMainWindow, QMenu, QMenuBar,
-    QSizePolicy, QStatusBar, QWidget)
+from PySide6.QtWidgets import (QApplication, QFrame, QHBoxLayout, QMainWindow,
+    QMenu, QMenuBar, QPushButton, QSizePolicy,
+    QSpacerItem, QStatusBar, QVBoxLayout, QWidget)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -42,6 +43,51 @@ class Ui_MainWindow(object):
         self.action_strikers.setObjectName(u"action_strikers")
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
+        self.horizontalLayout = QHBoxLayout(self.centralwidget)
+        self.horizontalLayout.setObjectName(u"horizontalLayout")
+        self.verticalLayout = QVBoxLayout()
+        self.verticalLayout.setObjectName(u"verticalLayout")
+        self.pushButton = QPushButton(self.centralwidget)
+        self.pushButton.setObjectName(u"pushButton")
+        self.pushButton.setMaximumSize(QSize(22, 16777215))
+
+        self.verticalLayout.addWidget(self.pushButton)
+
+        self.pushButton_2 = QPushButton(self.centralwidget)
+        self.pushButton_2.setObjectName(u"pushButton_2")
+        self.pushButton_2.setMaximumSize(QSize(22, 16777215))
+
+        self.verticalLayout.addWidget(self.pushButton_2)
+
+        self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+
+        self.verticalLayout.addItem(self.verticalSpacer)
+
+        self.pushButton_3 = QPushButton(self.centralwidget)
+        self.pushButton_3.setObjectName(u"pushButton_3")
+        self.pushButton_3.setMaximumSize(QSize(22, 16777215))
+
+        self.verticalLayout.addWidget(self.pushButton_3)
+
+
+        self.horizontalLayout.addLayout(self.verticalLayout)
+
+        self.frame = QFrame(self.centralwidget)
+        self.frame.setObjectName(u"frame")
+        self.frame.setFrameShape(QFrame.StyledPanel)
+        self.frame.setFrameShadow(QFrame.Raised)
+
+        self.horizontalLayout.addWidget(self.frame)
+
+        self.frame_2 = QFrame(self.centralwidget)
+        self.frame_2.setObjectName(u"frame_2")
+        self.frame_2.setFrameShape(QFrame.StyledPanel)
+        self.frame_2.setFrameShadow(QFrame.Raised)
+
+        self.horizontalLayout.addWidget(self.frame_2)
+
+        self.horizontalLayout.setStretch(1, 1)
+        self.horizontalLayout.setStretch(2, 1)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
@@ -83,6 +129,9 @@ class Ui_MainWindow(object):
         self.action_exit.setText(QCoreApplication.translate("MainWindow", u"\u0412\u044b\u0445\u043e\u0434", None))
         self.action_elastic_materials.setText(QCoreApplication.translate("MainWindow", u"\u041c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u044b \u0443\u0441\u0442\u0430\u043d\u043e\u0432\u043a\u0438", None))
         self.action_strikers.setText(QCoreApplication.translate("MainWindow", u"\u0423\u0434\u0430\u0440\u043d\u0438\u043a\u0438", None))
+        self.pushButton.setText(QCoreApplication.translate("MainWindow", u">", None))
+        self.pushButton_2.setText(QCoreApplication.translate("MainWindow", u"\u0415", None))
+        self.pushButton_3.setText(QCoreApplication.translate("MainWindow", u"S", None))
         self.menu.setTitle(QCoreApplication.translate("MainWindow", u"\u0424\u0430\u0439\u043b", None))
         self.menu_2.setTitle(QCoreApplication.translate("MainWindow", u"\u0422\u0430\u0431\u043b\u0438\u0446\u044b", None))
     # retranslateUi
