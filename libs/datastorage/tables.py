@@ -38,14 +38,17 @@ class ElasticProperties(Base):
 
     @property
     def rho(self) -> float:
-        return self.E/self.c**2*1e6
+        if self.c:
+            return self.E/self.c**2*1e6
+        else:
+            return 0
 
     def __repr__(self) -> str:
-        return f"{self.name}: E={self.E:g}, c={self.c:g}"
+        return f"#{self.id}-{self.name}: E={self.E:g}, c={self.c:g}"
 
     @staticmethod
     def data_record_header() -> list[str]:
-        return ["id", "название", "Е, МПа", "c, м/c", "плотность, кг/м^3"]
+        return ["id", "название", "Е, МПа", "c, м/c", "плотность, кг/м^3", "имя", "дата создания", "комментарий"]
 
     @staticmethod
     def data_record_columns() -> int:
@@ -55,6 +58,11 @@ class ElasticProperties(Base):
     def as_data_record(self) -> list[str]:
         result = [str(self.id), self.name]
         result += [f"{r:g}" for r in [self.E, self.c, self.rho]]
+        result += [repr(self), "", ""]
+        if self.creation_datetime:
+            result[-2] = str(self.creation_datetime)[:-10]
+        if self.notes:
+            result[-1] = self.notes
         return result
 
 
@@ -71,11 +79,15 @@ class Striker(Base):
     material: Mapped[ElasticProperties] = relationship()
 
     def __repr__(self):
-        return (f"{self.material.name}-{self.geom_type}-{self.D:.0f}x{self.L:.0f}")
+        size = f"{self.D:.0f}x"
+        if self.D0:
+            size += f"{self.D0:.0f}x"
+        size += f"{self.L:.0f}"
+        return (f"#{self.id}-{self.material.name}-{self.geom_type}-{size}")
 
     @staticmethod
     def data_record_header() -> list[str]:
-        return ["id", "D, мм", "D0, мм", "L, мм", "материал", "тип", "имя"]
+        return ["id", "D, мм", "D0, мм", "L, мм", "материал", "тип", "имя", "дата создания", "комментарий"]
 
     @staticmethod
     def data_record_columns() -> int:
@@ -89,9 +101,14 @@ class Striker(Base):
     def as_data_record(self) -> list[str]:
         result = [str(self.id)]
         result += [f"{r:g}" for r in [self.D, self.D0, self.L]]
-        result.append(self.material.name)
+        result.append(repr(self.material))
         result.append(self.geom_type)
         result.append(repr(self))
+        result += ["", ""]
+        if self.creation_datetime:
+            result[-2] = str(self.creation_datetime)[:-10]
+        if self.notes:
+            result[-1] = self.notes
         return result
 #
 #

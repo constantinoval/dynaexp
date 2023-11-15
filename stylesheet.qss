@@ -1,13 +1,36 @@
 * {
     font: 12pt;
 }
-QPushButton{
+
+#connect_btn_full, #tables_btn_full, #elastic_properties_btn, #strikers_btn,
+#bars_btn, #jacket_btn, #customer_btn, #exit_btn_full{
     text-align: left;
     padding-left: 4px;
-    color: rgba(0, 0, 0, 0.7);
+}
+
+#menu_btn:checked{
+    icon: url(:/icons/icons/collapse-arrow.png);
+}
+
+#menu_btn{
     border: none;
 }
+
+#menu_btn:hover{
+    border-style: solid;
+    border-width: 1px;
+    border-color: darkslategrey;
+    border-radius: 2px;
+    padding-bottom: 8px;
+}
+
+QPushButton{
+    color: rgba(0, 0, 0, 0.7);
+    border: none;
+    padding: 4px;
+}
 QPushButton:hover{
+    padding-bottom: 8px;
     color: black;
     border-style: solid;
     border-width: 1px;

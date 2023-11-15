@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>128</height>
+    <width>720</width>
+    <height>301</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -26,9 +26,6 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="1">
-      <widget class="QLineEdit" name="lineEdit_E"/>
-     </item>
      <item row="0" column="0">
       <widget class="QLabel" name="label">
        <property name="text">
@@ -36,8 +33,11 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="1">
-      <widget class="QLineEdit" name="lineEdit_c"/>
+     <item row="1" column="1">
+      <widget class="QLineEdit" name="lineEdit_E"/>
+     </item>
+     <item row="0" column="1">
+      <widget class="QLineEdit" name="lineEdit_name"/>
      </item>
      <item row="2" column="0">
       <widget class="QLabel" name="label_2">
@@ -46,8 +46,18 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="1">
-      <widget class="QLineEdit" name="lineEdit_name"/>
+     <item row="2" column="1">
+      <widget class="QLineEdit" name="lineEdit_c"/>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="label_4">
+       <property name="text">
+        <string>Комментарий</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QPlainTextEdit" name="comment_text"/>
      </item>
     </layout>
    </item>
@@ -59,6 +69,9 @@
      <property name="standardButtons">
       <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
      </property>
+     <property name="centerButtons">
+      <bool>false</bool>
+     </property>
     </widget>
    </item>
   </layout>
@@ -67,6 +80,7 @@
   <tabstop>lineEdit_name</tabstop>
   <tabstop>lineEdit_E</tabstop>
   <tabstop>lineEdit_c</tabstop>
+  <tabstop>comment_text</tabstop>
  </tabstops>
  <resources/>
  <connections>

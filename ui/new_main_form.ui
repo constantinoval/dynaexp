@@ -35,6 +35,12 @@
     </property>
     <item row="0" column="0" colspan="2">
      <widget class="QFrame" name="top_bar_frame">
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>50</height>
+       </size>
+      </property>
       <property name="frameShape">
        <enum>QFrame::StyledPanel</enum>
       </property>
@@ -42,8 +48,11 @@
        <enum>QFrame::Raised</enum>
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout_2">
-       <property name="leftMargin">
+       <property name="spacing">
         <number>0</number>
+       </property>
+       <property name="leftMargin">
+        <number>6</number>
        </property>
        <property name="topMargin">
         <number>0</number>
@@ -279,7 +288,7 @@
                   </widget>
                  </item>
                  <item>
-                  <widget class="QPushButton" name="pushButton_6">
+                  <widget class="QPushButton" name="jacket_btn">
                    <property name="text">
                     <string>Обойма</string>
                    </property>
@@ -292,7 +301,7 @@
                   </widget>
                  </item>
                  <item>
-                  <widget class="QPushButton" name="pushButton">
+                  <widget class="QPushButton" name="customer_btn">
                    <property name="text">
                     <string>Заказчик</string>
                    </property>
@@ -437,6 +446,9 @@
                       <property name="sortingEnabled">
                        <bool>false</bool>
                       </property>
+                      <attribute name="horizontalHeaderStretchLastSection">
+                       <bool>true</bool>
+                      </attribute>
                      </widget>
                     </item>
                    </layout>
@@ -497,7 +509,7 @@
                       </property>
                       <property name="icon">
                        <iconset resource="resources.qrc">
-                        <normaloff>:/icons/icons/add.png</normaloff>:/icons/icons/add.png</iconset>
+                        <normaloff>:/icons/icons/plus-button.png</normaloff>:/icons/icons/plus-button.png</iconset>
                       </property>
                       <property name="iconSize">
                        <size>
@@ -606,13 +618,13 @@
        <widget class="QFrame" name="small_menu_frame">
         <property name="minimumSize">
          <size>
-          <width>31</width>
+          <width>42</width>
           <height>0</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
-          <width>31</width>
+          <width>42</width>
           <height>100000</height>
          </size>
         </property>
@@ -627,7 +639,7 @@
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_2">
          <property name="spacing">
-          <number>4</number>
+          <number>2</number>
          </property>
          <property name="leftMargin">
           <number>0</number>
@@ -639,14 +651,14 @@
           <number>0</number>
          </property>
          <property name="bottomMargin">
-          <number>0</number>
+          <number>6</number>
          </property>
          <item>
           <widget class="QPushButton" name="connect_btn_small">
            <property name="minimumSize">
             <size>
-             <width>30</width>
-             <height>30</height>
+             <width>40</width>
+             <height>40</height>
             </size>
            </property>
            <property name="maximumSize">
@@ -660,12 +672,12 @@
            </property>
            <property name="icon">
             <iconset resource="resources.qrc">
-             <normaloff>:/icons/icons/database (1).png</normaloff>:/icons/icons/database (1).png</iconset>
+             <normaloff>:/icons/icons/database (2).png</normaloff>:/icons/icons/database (2).png</iconset>
            </property>
            <property name="iconSize">
             <size>
-             <width>20</width>
-             <height>20</height>
+             <width>30</width>
+             <height>30</height>
             </size>
            </property>
           </widget>
@@ -674,8 +686,8 @@
           <widget class="QPushButton" name="tables_btn_small">
            <property name="minimumSize">
             <size>
-             <width>30</width>
-             <height>30</height>
+             <width>40</width>
+             <height>40</height>
             </size>
            </property>
            <property name="maximumSize">
@@ -689,12 +701,12 @@
            </property>
            <property name="icon">
             <iconset resource="resources.qrc">
-             <normaloff>:/icons/icons/trigger.png</normaloff>:/icons/icons/trigger.png</iconset>
+             <normaloff>:/icons/icons/database_table.png</normaloff>:/icons/icons/database_table.png</iconset>
            </property>
            <property name="iconSize">
             <size>
-             <width>20</width>
-             <height>20</height>
+             <width>30</width>
+             <height>30</height>
             </size>
            </property>
           </widget>
@@ -716,8 +728,8 @@
           <widget class="QPushButton" name="exit_btn_small">
            <property name="minimumSize">
             <size>
-             <width>30</width>
-             <height>30</height>
+             <width>40</width>
+             <height>40</height>
             </size>
            </property>
            <property name="maximumSize">
@@ -731,12 +743,12 @@
            </property>
            <property name="icon">
             <iconset resource="resources.qrc">
-             <normaloff>:/icons/icons/remove-button.png</normaloff>:/icons/icons/remove-button.png</iconset>
+             <normaloff>:/icons/icons/logout.png</normaloff>:/icons/icons/logout.png</iconset>
            </property>
            <property name="iconSize">
             <size>
-             <width>20</width>
-             <height>20</height>
+             <width>30</width>
+             <height>30</height>
             </size>
            </property>
           </widget>
@@ -802,7 +814,7 @@
            </property>
            <property name="icon">
             <iconset resource="resources.qrc">
-             <normaloff>:/icons/icons/database (1).png</normaloff>:/icons/icons/database (1).png</iconset>
+             <normaloff>:/icons/icons/database (2).png</normaloff>:/icons/icons/database (2).png</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -831,7 +843,7 @@
            </property>
            <property name="icon">
             <iconset resource="resources.qrc">
-             <normaloff>:/icons/icons/trigger.png</normaloff>:/icons/icons/trigger.png</iconset>
+             <normaloff>:/icons/icons/database_table.png</normaloff>:/icons/icons/database_table.png</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -873,7 +885,7 @@
            </property>
            <property name="icon">
             <iconset resource="resources.qrc">
-             <normaloff>:/icons/icons/remove-button.png</normaloff>:/icons/icons/remove-button.png</iconset>
+             <normaloff>:/icons/icons/logout.png</normaloff>:/icons/icons/logout.png</iconset>
            </property>
            <property name="iconSize">
             <size>

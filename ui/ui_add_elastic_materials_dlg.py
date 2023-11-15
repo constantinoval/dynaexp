@@ -14,6 +14,7 @@ class Add_ElasticMaterial_Dlg(Ui_Dialog_add_elastic_material, pqw.QDialog):
             self.lineEdit_name.setText(self.material.name)
             self.lineEdit_E.setText(f"{self.material.E:g}")
             self.lineEdit_c.setText(f"{self.material.c:g}")
+            self.comment_text.setPlainText(self.material.notes)
 
         # self.exec()
 
@@ -25,6 +26,8 @@ class Add_ElasticMaterial_Dlg(Ui_Dialog_add_elastic_material, pqw.QDialog):
             self.material.name = name
             self.material.E = E
             self.material.c = c
+            if comment := str(self.comment_text.toPlainText()):
+                self.material.notes = comment
             self.session.commit()
         else:
             m = ElasticProperties(
@@ -32,6 +35,9 @@ class Add_ElasticMaterial_Dlg(Ui_Dialog_add_elastic_material, pqw.QDialog):
                 E=E,
                 c=c
             )
+            m.set_creation_time()
+            if comment := str(self.comment_text.toPlainText()):
+                m.notes = comment
             self.session.add(m)
             self.session.commit()
             self.material = m

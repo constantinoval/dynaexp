@@ -24,6 +24,7 @@ class Add_Striker_Dlg(Ui_Dialog_Add_Striker, pqw.QDialog):
             self.lineEdit_D.setText(str(self.striker.D))
             self.lineEdit_D0.setText(str(self.striker.D0))
             self.lineEdit_L.setText(str(self.striker.L))
+            self.comment_text.setPlainText(self.striker.notes)
         self.comboBox_material.setCurrentIndex(mat_index)
 
     @pqc.Slot()
@@ -32,8 +33,9 @@ class Add_Striker_Dlg(Ui_Dialog_Add_Striker, pqw.QDialog):
         dlg.exec()
         if dlg:
             m = dlg.material
-            self.comboBox_material.addItem(repr(m), m)
-            self.comboBox_material.setCurrentIndex(self.comboBox_material.count()-1)
+            if m:
+                self.comboBox_material.addItem(repr(m), m)
+                self.comboBox_material.setCurrentIndex(self.comboBox_material.count()-1)
 
     def accept(self):
         D = to_float(self.lineEdit_D.text())
@@ -45,9 +47,14 @@ class Add_Striker_Dlg(Ui_Dialog_Add_Striker, pqw.QDialog):
             self.striker.D0 = D0
             self.striker.L = L
             self.striker.material = m
+            if comment := str(self.comment_text.toPlainText()):
+                self.striker.notes = comment
             self.session.commit()
         else:
             s = Striker(D=D, D0=D0, L=L, material=m)
+            s.set_creation_time()
+            if comment := str(self.comment_text.toPlainText()):
+                s.notes = comment
             self.session.add(s)
             self.session.commit()
             self.striker = s
