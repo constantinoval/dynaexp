@@ -5,10 +5,13 @@ import PySide6.QtCore as pqc
 from ui.new_main_form import Ui_dynaexp_main_window
 from libs.datastorage.db_lib import open_session, create_test_database
 from functools import partial
-from libs.datastorage.tables import ElasticProperties, Striker
+from libs.datastorage.tables import (
+    ElasticProperties, Striker, MeasureBar, Jacket)
 from libs.common_tools import DataModel
 from ui.ui_add_elastic_materials_dlg import Add_ElasticMaterial_Dlg
 from ui.ui_add_striker_dlg import Add_Striker_Dlg
+from ui.ui_add_bar_dlg import Add_Bar_Dlg
+from ui.ui_add_jacket_dlg import Add_Jacket_Dlg
 
 
 class AppMainWindow(Ui_dynaexp_main_window, pqw.QMainWindow):
@@ -34,6 +37,8 @@ class AppMainWindow(Ui_dynaexp_main_window, pqw.QMainWindow):
         self.tables_btn_full.pressed.connect(partial(self.stacked_widget.setCurrentIndex, 1))
         self.elastic_properties_btn.pressed.connect(partial(self.set_table_content, ElasticProperties))
         self.strikers_btn.pressed.connect(partial(self.set_table_content, Striker))
+        self.bars_btn.pressed.connect(partial(self.set_table_content, MeasureBar))
+        self.jacket_btn.pressed.connect(partial(self.set_table_content, Jacket))
         self.stacked_widget.currentChanged.connect(self.on_mode_changed)
         self.stacked_widget.setCurrentIndex(0)
         self.record_delete_btn.pressed.connect(self.delete_record)
@@ -139,6 +144,26 @@ class AppMainWindow(Ui_dynaexp_main_window, pqw.QMainWindow):
                 self.data_model.records.append(dlg.striker.as_data_record)
                 self.data_model.layoutChanged.emit()
             return
+        if self.data_model.table_class == MeasureBar:
+            dlg = Add_Bar_Dlg(
+                parent=self,
+                session=self.session
+            )
+            dlg.exec()
+            if dlg.result():
+                self.data_model.records.append(dlg.bar.as_data_record)
+                self.data_model.layoutChanged.emit()
+            return
+        if self.data_model.table_class == Jacket:
+            dlg = Add_Jacket_Dlg(
+                parent=self,
+                session=self.session
+            )
+            dlg.exec()
+            if dlg.result():
+                self.data_model.records.append(dlg.jacket.as_data_record)
+                self.data_model.layoutChanged.emit()
+            return
 
     @pqc.Slot()
     def edit_table_record(self):
@@ -177,6 +202,28 @@ class AppMainWindow(Ui_dynaexp_main_window, pqw.QMainWindow):
             dlg.exec()
             if dlg.result():
                 self.data_model.records[row_num] = dlg.striker.as_data_record
+                self.data_model.layoutChanged.emit()
+            return
+        if self.data_model.table_class == MeasureBar:
+            dlg = Add_Bar_Dlg(
+                parent=self,
+                session=self.session,
+                bar=rec,
+            )
+            dlg.exec()
+            if dlg.result():
+                self.data_model.records[row_num] = dlg.bar.as_data_record
+                self.data_model.layoutChanged.emit()
+            return
+        if self.data_model.table_class == Jacket:
+            dlg = Add_Jacket_Dlg(
+                parent=self,
+                session=self.session,
+                jacket=rec,
+            )
+            dlg.exec()
+            if dlg.result():
+                self.data_model.records[row_num] = dlg.jacket.as_data_record
                 self.data_model.layoutChanged.emit()
             return
 

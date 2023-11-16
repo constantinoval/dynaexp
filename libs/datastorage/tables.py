@@ -112,27 +112,89 @@ class Striker(Base):
         return result
 #
 #
-# class MeasureBar(Base):
-#     """
-#     Таблицы с мерными стержнями: сечение, упругий материал, длина, словарь с данными для
-#     коррекции дисперсии
-#     """
-#     __tablename__ = "measurebars"
-#     id: Mapped[int] = mapped_column(primary_key=True)
-#     geometry_id: Mapped[int] = mapped_column(ForeignKey("geometries.id"))
-#     material_id: Mapped[int] = mapped_column(ForeignKey("elasticproperties.id"))
-#     material: Mapped["ElasticProperties"] = relationship("ElasticProperties")
-#     geometry: Mapped["Geometry"] = relationship()
-#     dispersion_data: Mapped[dict] = mapped_column(PickleType, default={})
-#
-#     def __repr__(self):
-#         result = (f"Measure bar: id={self.id!r}, length={self.length!r}\n"
-#                   f"{self.section!r}\n"
-#                   f"{self.material!r}")
-#         if self.dispersion_data:
-#             result += f"\nDispersion data: {self.dispersion_data!r}"
-#         return result
-#
+class MeasureBar(Base):
+    """
+    Таблицы с мерными стержнями: сечение, упругий материал, длина, словарь с данными для
+    коррекции дисперсии
+    """
+    __tablename__ = "measurebars"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    D: Mapped[float]
+    D0: Mapped[Optional[float]] = mapped_column(default=0.0)
+    L: Mapped[float]
+    material_id: Mapped[int] = mapped_column(ForeignKey('elasticproperties.id'))
+    material: Mapped[ElasticProperties] = relationship()
+
+    def __repr__(self):
+        size = f"{self.D:.0f}x"
+        if self.D0:
+            size += f"{self.D0:.0f}x"
+        size += f"{self.L:.0f}"
+        return (f"#{self.id}-{self.material.name}-{self.geom_type}-{size}")
+
+    @staticmethod
+    def data_record_header() -> list[str]:
+        return ["id", "D, мм", "D0, мм", "L, мм", "материал", "тип", "имя", "дата создания", "комментарий"]
+
+    @staticmethod
+    def data_record_columns() -> int:
+        return len(MeasureBar.data_record_header())
+
+    @property
+    def geom_type(self) -> str:
+        return "сплошной" if self.D0 == 0.0 else "трубка"
+
+    @property
+    def as_data_record(self) -> list[str]:
+        result = [str(self.id)]
+        result += [f"{r:g}" for r in [self.D, self.D0, self.L]]
+        result.append(repr(self.material))
+        result.append(self.geom_type)
+        result.append(repr(self))
+        result += ["", ""]
+        if self.creation_datetime:
+            result[-2] = str(self.creation_datetime)[:-10]
+        if self.notes:
+            result[-1] = self.notes
+        return result
+
+
+class Jacket(Base):
+    """
+    Таблица с параметрами обоймы: длина, наружный и внешний диаметр, ссылка на упругий материал.
+    """
+    __tablename__ = "jackets"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    D: Mapped[float]
+    D0: Mapped[float]
+    L: Mapped[float]
+    material_id: Mapped[int] = mapped_column(ForeignKey('elasticproperties.id'))
+    material: Mapped[ElasticProperties] = relationship()
+
+    def __repr__(self):
+        size = f"{self.D:.0f}x{self.D0:.0f}x{self.L:.0f}"
+        return (f"#{self.id}-{self.material.name}-{size}")
+
+    @staticmethod
+    def data_record_header() -> list[str]:
+        return ["id", "D, мм", "D0, мм", "L, мм", "материал", "имя", "дата создания", "комментарий"]
+
+    @staticmethod
+    def data_record_columns() -> int:
+        return len(Jacket.data_record_header())
+
+    @property
+    def as_data_record(self) -> list[str]:
+        result = [str(self.id)]
+        result += [f"{r:g}" for r in [self.D, self.D0, self.L]]
+        result.append(repr(self.material))
+        result.append(repr(self))
+        result += ["", ""]
+        if self.creation_datetime:
+            result[-2] = str(self.creation_datetime)[:-10]
+        if self.notes:
+            result[-1] = self.notes
+        return result
 #
 # class ExperimentType(Base):
 #     """
@@ -164,21 +226,7 @@ class Striker(Base):
 #         return result
 #
 #
-# class Jacket(Base):
-#     """
-#     Таблица с параметрами обоймы: длина, наружный и внешний диаметр, ссылка на упругий материал.
-#     """
-#     __tablename__ = "jackets"
-#     id: Mapped[int] = mapped_column(primary_key=True)
-#     D: Mapped[float]
-#     D0: Mapped[float]
-#     length: Mapped[float]
-#     material_id: Mapped[int] = mapped_column(ForeignKey("elasticproperties.id"))
-#     material: Mapped["ElasticProperties"] = relationship("ElasticProperties")
-#
-#     def __repr__(self):
-#         return (f"Jacket: id={self.id!r}, R={self.R!r}, R0={self.R0!r}\n"
-#                 f"{self.material}")
+
 #
 #
 # class OscChannel(Base):

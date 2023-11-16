@@ -2,21 +2,31 @@
     font: 12pt;
 }
 
-#connect_btn_full, #tables_btn_full, #elastic_properties_btn, #strikers_btn,
-#bars_btn, #jacket_btn, #customer_btn, #exit_btn_full{
+#connect_btn_full,
+#tables_btn_full,
+#elastic_properties_btn,
+#strikers_btn,
+#bars_btn,
+#jacket_btn,
+#customer_btn,
+#exit_btn_full {
     text-align: left;
     padding-left: 4px;
 }
 
-#menu_btn:checked{
+#menu_btn:checked {
     icon: url(:/icons/icons/collapse-arrow.png);
 }
 
-#menu_btn{
+#menu_btn {
     border: none;
 }
 
-#menu_btn:hover{
+#menu_btn:pressed {
+    padding-top: 8px;
+}
+
+#menu_btn:hover {
     /* border-style: solid;
     border-width: 1px;
     border-color: darkslategrey; */
@@ -25,13 +35,18 @@
     background-color: rgba(0, 0, 0, 30);
 }
 
-QPushButton{
+QPushButton {
     color: rgba(0, 0, 0, 0.7);
     border: none;
     padding: 4px;
+    min-height: 25px;
 }
-QPushButton:hover{
+
+QPushButton:hover {
+    /* margin-top: 4px;
+    margin-bottom: 4px; */
     padding-bottom: 8px;
+    font-size: 18px;
     /* color: black;
     border-style: solid;
     border-width: 1px;
@@ -39,22 +54,31 @@ QPushButton:hover{
     border-radius: 4px;
     background-color: rgba(0, 0, 0, 30);
 }
-#top_bar_frame, #small_menu_frame, #full_menu_frame{
+
+QPushButton:pressed {
+    padding-top: 8px;
+    background-color: rgba(255, 255, 255, 150);
+}
+
+#top_bar_frame,
+#small_menu_frame,
+#full_menu_frame {
     background-color: rgba(0, 0, 0, 10);
 }
-QPushButton:checked{
+
+QPushButton:checked {
     border-bottom-width: 3px;
     border-bottom-color: green;
     border-bottom-style: solid;
 }
 
-#mode_label{
+#mode_label {
     font-size: 20px;
     font-weight: bold;
 }
 
-QTableView{
-   gridline-color: grey;
+QTableView {
+    gridline-color: grey;
 }
 
 
