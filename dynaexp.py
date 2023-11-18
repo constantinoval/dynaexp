@@ -7,7 +7,7 @@ from libs.datastorage.db_lib import open_session, create_test_database
 from functools import partial
 from libs.datastorage.tables import (
     ElasticProperties, Striker, MeasureBar, Jacket, Customer,
-    Executor, ExperimentsGroup)
+    Executor, ExperimentsGroup, OscChannel)
 from libs.common_tools import DataModel
 from ui.ui_add_elastic_materials_dlg import Add_ElasticMaterial_Dlg
 from ui.ui_add_striker_dlg import Add_Striker_Dlg
@@ -16,6 +16,7 @@ from ui.ui_add_jacket_dlg import Add_Jacket_Dlg
 from ui.ui_add_customer_dlg import Add_Customer_Dlg
 from ui.ui_add_executor_dlg import Add_Executor_Dlg
 from ui.ui_add_experimentsgroup_dlg import Add_ExperimentsGroup_Dlg
+from ui.ui_add_oscchannel import Add_OscChannel_Dlg
 
 
 TABLE_DIALOGS_DICT = {
@@ -26,6 +27,7 @@ TABLE_DIALOGS_DICT = {
     Customer: Add_Customer_Dlg,
     Executor: Add_Executor_Dlg,
     ExperimentsGroup: Add_ExperimentsGroup_Dlg,
+    OscChannel: Add_OscChannel_Dlg,
 }
 
 
@@ -57,6 +59,7 @@ class AppMainWindow(Ui_dynaexp_main_window, pqw.QMainWindow):
         self.customer_btn.pressed.connect(partial(self.set_table_content, Customer))
         self.executor_btn.pressed.connect(partial(self.set_table_content, Executor))
         self.experimentsgroup_btn.pressed.connect(partial(self.set_table_content, ExperimentsGroup))
+        self.oscchannel_btn.pressed.connect(partial(self.set_table_content, OscChannel))
         self.stacked_widget.currentChanged.connect(self.on_mode_changed)
         self.stacked_widget.setCurrentIndex(0)
         self.record_delete_btn.pressed.connect(self.delete_record)

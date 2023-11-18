@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="icons">
+    <file>icons/calculate.png</file>
     <file>icons/add-button.png</file>
     <file>icons/collapse-arrow.png</file>
     <file>icons/database (2).png</file>

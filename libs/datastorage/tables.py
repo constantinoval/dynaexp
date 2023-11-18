@@ -38,12 +38,13 @@ class ElasticProperties(Base):
     name: Mapped[str] = mapped_column(String(30))
     E: Mapped[float]
     c: Mapped[float]
+
     # rho: Mapped[float]
 
     @property
     def rho(self) -> float:
         if self.c:
-            return self.E/self.c**2*1e6
+            return self.E / self.c ** 2 * 1e6
         else:
             return 0
 
@@ -114,6 +115,8 @@ class Striker(Base):
         if self.notes:
             result[-1] = self.notes
         return result
+
+
 #
 #
 class MeasureBar(Base):
@@ -228,6 +231,7 @@ class Customer(Base):
     def __repr__(self):
         return (f"#{self.id}-{self.name}")
 
+
 class Executor(Base):
     """
     Таблица с заказчиками.
@@ -287,8 +291,110 @@ class ExperimentsGroup(Base):
             result[-1] = self.notes
         return result
 
-def __repr__(self):
-    return (f"#{self.id}-{self.name}")
+    def __repr__(self) -> str:
+        return f"#{self.id}-{self.short_name}"
+
+
+class OscChannel(Base):
+    """
+    Измерительный канал. Может быть сигналом со стержня, обоймы или образца.
+    """
+    __tablename__ = "oscchannels"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    tarir: Mapped[float]
+    gauge_position: Mapped[Optional[float]]
+    bar_id: Mapped[Optional[int]] = mapped_column(ForeignKey('measurebars.id'))
+    bar: Mapped[Optional[MeasureBar]] = relationship()
+    jacket_id: Mapped[Optional[int]] = mapped_column(ForeignKey('jackets.id'))
+    jacket: Mapped[Optional[Jacket]] = relationship()
+
+    @staticmethod
+    def data_record_header() -> list[str]:
+        return ["id", "имя", "тарировочный коэффициент", "положение датчика",
+                "дата создания", "комментарий"]
+
+    @property
+    def channel_type(self) -> str:
+        if self.bar:
+            return "Датчик на стержне"
+        if self.jacket:
+            return "Датчик на обойме"
+        return "Датчик на образце"
+
+    @property
+    def parent(self) -> str:
+        if self.bar:
+            return repr(self.bar)
+        if self.jacket:
+            return repr(self.jacket)
+        return ""
+
+    @property
+    def as_data_record(self) -> list[str]:
+        result = [str(self.id)]
+        name = repr(self)
+        if parent := self.parent:
+            name += ": "+parent
+        result.append(name)
+        result.append("" if self.tarir is None else str(self.tarir))
+        result.append("" if self.gauge_position is None else str(self.gauge_position))
+        result += ["", ""]
+        if self.creation_datetime:
+            result[-2] = str(self.creation_datetime)[:-10]
+        if self.notes:
+            result[-1] = self.notes
+        return result
+
+    def __repr__(self):
+        return (f"#{self.id}-{self.channel_type}")
+
+class SetupChannels(Base):
+    """
+    Вспомогательная таблица для связи установок и каналов измерения.
+    """
+    __tablename__ = "setupchannels"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    channel_id: Mapped[int] = mapped_column(ForeignKey('oscchannels.id'))
+    setup_id: Mapped[int] = mapped_column(ForeignKey('setups.id'))
+
+class Setup(Base):
+    """
+    Таблица с экспериментальными установками.
+    Каждая установка хранит список каналов измерения.
+    """
+    __tablename__ = "setups"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    channels: Mapped[List[OscChannel]] = relationship(secondary="setupchannels")
+
+    # def __repr__(self) -> str:
+    #     result = ""
+    #     for ch in self.channels:
+    #         if ch.bar:
+    #             L = ch.bar.length
+    #             D = ch.bar.section.par1
+    #             D0 = ch.bar.section.par2
+    #             mat = ch.bar.material.name
+    #             section_type = {
+    #                 SectionTypes.circle: "Стержень",
+    #                 SectionTypes.tube: "Трубка",
+    #             }[ch.bar.section.section_type]
+    #             section_size = {
+    #                 SectionTypes.circle: f"{D:.0f}",
+    #                 SectionTypes.tube: f"{D:.0f}x{D0:.0f}",
+    #             }[ch.bar.section.section_type]
+    #             result += f"({section_type}:{mat}_{L:.0f}x{section_size})"
+    #             continue
+    #         elif ch.jacket:
+    #             D0 = ch.jacket.D0
+    #             D = ch.jacket.D
+    #             L = ch.jacket.length
+    #             mat = ch.jacket.material.name
+    #             result += f"(Обойма:{mat}_{L:.0f}x{D:.0f}x{D0:.0f})"
+    #             continue
+    #         else:
+    #             result += f"(Датчик на образце)"
+    #     result += f"[{self.creation_datetime}]"
+    #     return result
 
 #
 # class ExperimentType(Base):
@@ -324,68 +430,9 @@ def __repr__(self):
 
 #
 #
-# class OscChannel(Base):
-#     """
-#     Измерительный канал.
-#     Хранит параметры датчика и инструмента измерения (мерный стержень, обойма).
-#     """
-#     __tablename__ = "oscchannels"
-#     id: Mapped[int] = mapped_column(primary_key=True)
-#     tarir: Mapped[float] = mapped_column(default=1.0)
-#     bar_id: Mapped[Optional[int]] = mapped_column(ForeignKey("measurebars.id"))
-#     bar: Mapped[Optional["MeasureBar"]] = relationship("MeasureBar")
-#     jacket_id: Mapped[Optional[int]] = mapped_column(ForeignKey("jackets.id"))
-#     jacket: Mapped[Optional["Jacket"]] = relationship("Jacket")
-#     gauge_position: Mapped[Optional[float]]
+
 #
 #
-# class SetupChannels(Base):
-#     """
-#     Вспомогательная таблица для связи установок и каналов измерения.
-#     """
-#     __tablename__ = "setupchannels"
-#     id: Mapped[int] = mapped_column(primary_key=True)
-#     channel_id: Mapped[int] = mapped_column(ForeignKey('oscchannels.id'))
-#     setup_id: Mapped[int] = mapped_column(ForeignKey('setups.id'))
-#
-#
-# class Setup(Base):
-#     """
-#     Таблица с экспериментальными установками. Хранит список каналов измерения и параметры ударника.
-#     """
-#     __tablename__ = "setups"
-#     id: Mapped[int] = mapped_column(primary_key=True)
-#     channels: Mapped[List["OscChannel"]] = relationship(secondary="setupchannels")
-#
-#     def __repr__(self) -> str:
-#         result = ""
-#         for ch in self.channels:
-#             if ch.bar:
-#                 L = ch.bar.length
-#                 D = ch.bar.section.par1
-#                 D0 = ch.bar.section.par2
-#                 mat = ch.bar.material.name
-#                 section_type = {
-#                     SectionTypes.circle: "Стержень",
-#                     SectionTypes.tube: "Трубка",
-#                 }[ch.bar.section.section_type]
-#                 section_size = {
-#                     SectionTypes.circle: f"{D:.0f}",
-#                     SectionTypes.tube: f"{D:.0f}x{D0:.0f}",
-#                 }[ch.bar.section.section_type]
-#                 result += f"({section_type}:{mat}_{L:.0f}x{section_size})"
-#                 continue
-#             elif ch.jacket:
-#                 D0 = ch.jacket.D0
-#                 D = ch.jacket.D
-#                 L = ch.jacket.length
-#                 mat = ch.jacket.material.name
-#                 result += f"(Обойма:{mat}_{L:.0f}x{D:.0f}x{D0:.0f})"
-#                 continue
-#             else:
-#                 result += f"(Датчик на образце)"
-#         result += f"[{self.creation_datetime}]"
-#         return result
 #
 #
 # class DBImage(Base):
@@ -439,5 +486,5 @@ def __repr__(self):
 #     images: Mapped[Optional[List["DBImage"]]] = relationship()
 
 
-if __name__=="__main__":
+if __name__ == "__main__":
     pass

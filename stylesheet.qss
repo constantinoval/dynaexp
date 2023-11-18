@@ -11,7 +11,8 @@
 #customer_btn,
 #exit_btn_full,
 #executor_btn,
-#experimentsgroup_btn{
+#experimentsgroup_btn,
+#oscchannel_btn{
     text-align: left;
     padding-left: 4px;
 }

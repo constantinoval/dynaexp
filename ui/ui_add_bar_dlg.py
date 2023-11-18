@@ -33,7 +33,7 @@ class Add_Bar_Dlg(Ui_Dialog_Add_Striker, pqw.QDialog):
         dlg = Add_ElasticMaterial_Dlg(session=self.session)
         dlg.exec()
         if dlg:
-            m = dlg.material
+            m = dlg.instance
             if m:
                 self.comboBox_material.addItem(repr(m), m)
                 self.comboBox_material.setCurrentIndex(self.comboBox_material.count()-1)

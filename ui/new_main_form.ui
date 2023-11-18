@@ -351,9 +351,48 @@
                   </widget>
                  </item>
                  <item>
+                  <widget class="QPushButton" name="oscchannel_btn">
+                   <property name="text">
+                    <string>Измерительный канал</string>
+                   </property>
+                   <property name="checkable">
+                    <bool>true</bool>
+                   </property>
+                   <property name="autoExclusive">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
                   <widget class="QPushButton" name="experimentsgroup_btn">
                    <property name="text">
                     <string>Группа экспериментов</string>
+                   </property>
+                   <property name="checkable">
+                    <bool>true</bool>
+                   </property>
+                   <property name="autoExclusive">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="experimentsgroup_btn_2">
+                   <property name="text">
+                    <string>Фотография</string>
+                   </property>
+                   <property name="checkable">
+                    <bool>true</bool>
+                   </property>
+                   <property name="autoExclusive">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="experimentsgroup_btn_3">
+                   <property name="text">
+                    <string>Видео</string>
                    </property>
                    <property name="checkable">
                     <bool>true</bool>
@@ -392,7 +431,7 @@
                  <item>
                   <widget class="QPushButton" name="pushButton_5">
                    <property name="text">
-                    <string>Измерительный канал</string>
+                    <string>Установка</string>
                    </property>
                    <property name="checkable">
                     <bool>true</bool>
@@ -797,7 +836,7 @@
        <widget class="QFrame" name="full_menu_frame">
         <property name="minimumSize">
          <size>
-          <width>170</width>
+          <width>180</width>
           <height>0</height>
          </size>
         </property>
