@@ -170,12 +170,19 @@ class Ui_dynaexp_main_window(object):
 
         self.verticalLayout_5.addWidget(self.customer_btn)
 
-        self.pushButton_2 = QPushButton(self.frame_2)
-        self.pushButton_2.setObjectName(u"pushButton_2")
-        self.pushButton_2.setCheckable(True)
-        self.pushButton_2.setAutoExclusive(True)
+        self.executor_btn = QPushButton(self.frame_2)
+        self.executor_btn.setObjectName(u"executor_btn")
+        self.executor_btn.setCheckable(True)
+        self.executor_btn.setAutoExclusive(True)
 
-        self.verticalLayout_5.addWidget(self.pushButton_2)
+        self.verticalLayout_5.addWidget(self.executor_btn)
+
+        self.experimentsgroup_btn = QPushButton(self.frame_2)
+        self.experimentsgroup_btn.setObjectName(u"experimentsgroup_btn")
+        self.experimentsgroup_btn.setCheckable(True)
+        self.experimentsgroup_btn.setAutoExclusive(True)
+
+        self.verticalLayout_5.addWidget(self.experimentsgroup_btn)
 
         self.pushButton_3 = QPushButton(self.frame_2)
         self.pushButton_3.setObjectName(u"pushButton_3")
@@ -426,7 +433,8 @@ class Ui_dynaexp_main_window(object):
         self.bars_btn.setText(QCoreApplication.translate("dynaexp_main_window", u"\u041c\u0435\u0440\u043d\u044b\u0439 \u0441\u0442\u0435\u0440\u0436\u0435\u043d\u044c", None))
         self.jacket_btn.setText(QCoreApplication.translate("dynaexp_main_window", u"\u041e\u0431\u043e\u0439\u043c\u0430", None))
         self.customer_btn.setText(QCoreApplication.translate("dynaexp_main_window", u"\u0417\u0430\u043a\u0430\u0437\u0447\u0438\u043a", None))
-        self.pushButton_2.setText(QCoreApplication.translate("dynaexp_main_window", u"\u041e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0435\u043d\u043d\u044b\u0439", None))
+        self.executor_btn.setText(QCoreApplication.translate("dynaexp_main_window", u"\u041e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0435\u043d\u043d\u044b\u0439", None))
+        self.experimentsgroup_btn.setText(QCoreApplication.translate("dynaexp_main_window", u"\u0413\u0440\u0443\u043f\u043f\u0430 \u044d\u043a\u0441\u043f\u0435\u0440\u0438\u043c\u0435\u043d\u0442\u043e\u0432", None))
         self.pushButton_3.setText(QCoreApplication.translate("dynaexp_main_window", u"\u041c\u0430\u0442\u0435\u0440\u0438\u0430\u043b", None))
         self.pushButton_4.setText(QCoreApplication.translate("dynaexp_main_window", u"\u041e\u0431\u0440\u0430\u0437\u0435\u0446", None))
         self.pushButton_5.setText(QCoreApplication.translate("dynaexp_main_window", u"\u0418\u0437\u043c\u0435\u0440\u0438\u0442\u0435\u043b\u044c\u043d\u044b\u0439 \u043a\u0430\u043d\u0430\u043b", None))

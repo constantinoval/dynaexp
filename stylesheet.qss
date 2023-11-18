@@ -9,7 +9,9 @@
 #bars_btn,
 #jacket_btn,
 #customer_btn,
-#exit_btn_full {
+#exit_btn_full,
+#executor_btn,
+#experimentsgroup_btn{
     text-align: left;
     padding-left: 4px;
 }

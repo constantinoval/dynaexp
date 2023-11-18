@@ -7,24 +7,24 @@ from libs.common_tools import to_float
 
 
 class Add_Striker_Dlg(Ui_Dialog_Add_Striker, pqw.QDialog):
-    def __init__(self, session, striker=None, *args, **kwargs):
+    def __init__(self, session, instance=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.setupUi(self)
         self.setModal(True)
         self.session = session
-        self.striker = striker
+        self.instance = instance
         mat_index = 0
         for i, m in enumerate(self.session.query(ElasticProperties).all()):
             self.comboBox_material.addItem(repr(m), userData=m)
-            if self.striker:
-                if m.id == self.striker.material.id:
+            if self.instance:
+                if m.id == self.instance.material.id:
                     mat_index = i
         self.pushButton_add_material.pressed.connect(self.add_material)
-        if self.striker:
-            self.lineEdit_D.setText(str(self.striker.D))
-            self.lineEdit_D0.setText(str(self.striker.D0))
-            self.lineEdit_L.setText(str(self.striker.L))
-            self.comment_text.setPlainText(self.striker.notes)
+        if self.instance:
+            self.lineEdit_D.setText(str(self.instance.D))
+            self.lineEdit_D0.setText(str(self.instance.D0))
+            self.lineEdit_L.setText(str(self.instance.L))
+            self.comment_text.setPlainText(self.instance.notes)
         self.comboBox_material.setCurrentIndex(mat_index)
 
     @pqc.Slot()
@@ -42,13 +42,13 @@ class Add_Striker_Dlg(Ui_Dialog_Add_Striker, pqw.QDialog):
         D0 = to_float(self.lineEdit_D0.text())
         L = to_float(self.lineEdit_L.text())
         m = self.comboBox_material.currentData(pqc.Qt.UserRole)
-        if self.striker:
-            self.striker.D = D
-            self.striker.D0 = D0
-            self.striker.L = L
-            self.striker.material = m
+        if self.instance:
+            self.instance.D = D
+            self.instance.D0 = D0
+            self.instance.L = L
+            self.instance.material = m
             if comment := str(self.comment_text.toPlainText()):
-                self.striker.notes = comment
+                self.instance.notes = comment
             self.session.commit()
         else:
             s = Striker(D=D, D0=D0, L=L, material=m)
@@ -57,5 +57,5 @@ class Add_Striker_Dlg(Ui_Dialog_Add_Striker, pqw.QDialog):
                 s.notes = comment
             self.session.add(s)
             self.session.commit()
-            self.striker = s
+            self.instance = s
         self.done(1)

@@ -23,6 +23,10 @@ class Base(DeclarativeBase):
     def set_creation_time(self):
         self.creation_datetime = datetime.now()
 
+    @classmethod
+    def data_record_columns(cls) -> int:
+        return len(cls.data_record_header())
+
 
 class ElasticProperties(Base):
     """
@@ -50,9 +54,9 @@ class ElasticProperties(Base):
     def data_record_header() -> list[str]:
         return ["id", "название", "Е, МПа", "c, м/c", "плотность, кг/м^3", "имя", "дата создания", "комментарий"]
 
-    @staticmethod
-    def data_record_columns() -> int:
-        return len(ElasticProperties.data_record_header())
+    # @staticmethod
+    # def data_record_columns() -> int:
+    #     return len(ElasticProperties.data_record_header())
 
     @property
     def as_data_record(self) -> list[str]:
@@ -89,9 +93,9 @@ class Striker(Base):
     def data_record_header() -> list[str]:
         return ["id", "D, мм", "D0, мм", "L, мм", "материал", "тип", "имя", "дата создания", "комментарий"]
 
-    @staticmethod
-    def data_record_columns() -> int:
-        return len(Striker.data_record_header())
+    # @staticmethod
+    # def data_record_columns() -> int:
+    #     return len(Striker.data_record_header())
 
     @property
     def geom_type(self) -> str:
@@ -136,9 +140,9 @@ class MeasureBar(Base):
     def data_record_header() -> list[str]:
         return ["id", "D, мм", "D0, мм", "L, мм", "материал", "тип", "имя", "дата создания", "комментарий"]
 
-    @staticmethod
-    def data_record_columns() -> int:
-        return len(MeasureBar.data_record_header())
+    # @staticmethod
+    # def data_record_columns() -> int:
+    #     return len(MeasureBar.data_record_header())
 
     @property
     def geom_type(self) -> str:
@@ -179,9 +183,9 @@ class Jacket(Base):
     def data_record_header() -> list[str]:
         return ["id", "D, мм", "D0, мм", "L, мм", "материал", "имя", "дата создания", "комментарий"]
 
-    @staticmethod
-    def data_record_columns() -> int:
-        return len(Jacket.data_record_header())
+    # @staticmethod
+    # def data_record_columns() -> int:
+    #     return len(Jacket.data_record_header())
 
     @property
     def as_data_record(self) -> list[str]:
@@ -195,6 +199,97 @@ class Jacket(Base):
         if self.notes:
             result[-1] = self.notes
         return result
+
+
+class Customer(Base):
+    """
+    Таблица с заказчиками.
+    """
+    __tablename__ = "customers"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str]
+
+    @staticmethod
+    def data_record_header() -> list[str]:
+        return ["id", "имя", "название", "дата создания", "комментарий"]
+
+    @property
+    def as_data_record(self) -> list[str]:
+        result = [str(self.id)]
+        result.append(self.name)
+        result.append(repr(self))
+        result += ["", ""]
+        if self.creation_datetime:
+            result[-2] = str(self.creation_datetime)[:-10]
+        if self.notes:
+            result[-1] = self.notes
+        return result
+
+    def __repr__(self):
+        return (f"#{self.id}-{self.name}")
+
+class Executor(Base):
+    """
+    Таблица с заказчиками.
+    """
+    __tablename__ = "executors"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str]
+
+    @staticmethod
+    def data_record_header() -> list[str]:
+        return ["id", "имя", "название", "дата создания", "комментарий"]
+
+    @property
+    def as_data_record(self) -> list[str]:
+        result = [str(self.id)]
+        result.append(self.name)
+        result.append(repr(self))
+        result += ["", ""]
+        if self.creation_datetime:
+            result[-2] = str(self.creation_datetime)[:-10]
+        if self.notes:
+            result[-1] = self.notes
+        return result
+
+    def __repr__(self):
+        return (f"#{self.id}-{self.name}")
+
+
+class ExperimentsGroup(Base):
+    """
+    Таблица с группами экспериментов.
+    """
+    __tablename__ = "experimentsgroups"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    short_name: Mapped[str]
+    contract: Mapped[str]
+    customer_id: Mapped[int] = mapped_column(ForeignKey('customers.id'))
+    customer: Mapped[Customer] = relationship()
+    executor_id: Mapped[int] = mapped_column(ForeignKey('executors.id'))
+    executor: Mapped[Executor] = relationship()
+
+    @staticmethod
+    def data_record_header() -> list[str]:
+        return ["id", "краткое название", "договор", "заказчик", "исполнитель", "дата создания", "комментарий"]
+
+    @property
+    def as_data_record(self) -> list[str]:
+        result = [str(self.id)]
+        result.append(self.short_name)
+        result.append(self.contract)
+        result.append(repr(self.customer))
+        result.append(repr(self.executor))
+        result += ["", ""]
+        if self.creation_datetime:
+            result[-2] = str(self.creation_datetime)[:-10]
+        if self.notes:
+            result[-1] = self.notes
+        return result
+
+def __repr__(self):
+    return (f"#{self.id}-{self.name}")
+
 #
 # class ExperimentType(Base):
 #     """

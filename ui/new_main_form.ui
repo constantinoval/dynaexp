@@ -338,9 +338,22 @@
                   </widget>
                  </item>
                  <item>
-                  <widget class="QPushButton" name="pushButton_2">
+                  <widget class="QPushButton" name="executor_btn">
                    <property name="text">
                     <string>Ответственный</string>
+                   </property>
+                   <property name="checkable">
+                    <bool>true</bool>
+                   </property>
+                   <property name="autoExclusive">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="experimentsgroup_btn">
+                   <property name="text">
+                    <string>Группа экспериментов</string>
                    </property>
                    <property name="checkable">
                     <bool>true</bool>

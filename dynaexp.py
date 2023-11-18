@@ -6,12 +6,27 @@ from ui.new_main_form import Ui_dynaexp_main_window
 from libs.datastorage.db_lib import open_session, create_test_database
 from functools import partial
 from libs.datastorage.tables import (
-    ElasticProperties, Striker, MeasureBar, Jacket)
+    ElasticProperties, Striker, MeasureBar, Jacket, Customer,
+    Executor, ExperimentsGroup)
 from libs.common_tools import DataModel
 from ui.ui_add_elastic_materials_dlg import Add_ElasticMaterial_Dlg
 from ui.ui_add_striker_dlg import Add_Striker_Dlg
 from ui.ui_add_bar_dlg import Add_Bar_Dlg
 from ui.ui_add_jacket_dlg import Add_Jacket_Dlg
+from ui.ui_add_customer_dlg import Add_Customer_Dlg
+from ui.ui_add_executor_dlg import Add_Executor_Dlg
+from ui.ui_add_experimentsgroup_dlg import Add_ExperimentsGroup_Dlg
+
+
+TABLE_DIALOGS_DICT = {
+    ElasticProperties: Add_ElasticMaterial_Dlg,
+    Striker: Add_Striker_Dlg,
+    MeasureBar: Add_Bar_Dlg,
+    Jacket: Add_Jacket_Dlg,
+    Customer: Add_Customer_Dlg,
+    Executor: Add_Executor_Dlg,
+    ExperimentsGroup: Add_ExperimentsGroup_Dlg,
+}
 
 
 class AppMainWindow(Ui_dynaexp_main_window, pqw.QMainWindow):
@@ -39,6 +54,9 @@ class AppMainWindow(Ui_dynaexp_main_window, pqw.QMainWindow):
         self.strikers_btn.pressed.connect(partial(self.set_table_content, Striker))
         self.bars_btn.pressed.connect(partial(self.set_table_content, MeasureBar))
         self.jacket_btn.pressed.connect(partial(self.set_table_content, Jacket))
+        self.customer_btn.pressed.connect(partial(self.set_table_content, Customer))
+        self.executor_btn.pressed.connect(partial(self.set_table_content, Executor))
+        self.experimentsgroup_btn.pressed.connect(partial(self.set_table_content, ExperimentsGroup))
         self.stacked_widget.currentChanged.connect(self.on_mode_changed)
         self.stacked_widget.setCurrentIndex(0)
         self.record_delete_btn.pressed.connect(self.delete_record)
@@ -118,52 +136,21 @@ class AppMainWindow(Ui_dynaexp_main_window, pqw.QMainWindow):
     @pqc.Slot()
     def add_table_record(self):
         """
-        добавление записи активной таблицы
+        Добавление записи активной таблицы
         """
         if self.session is None:
             return
         if self.data_model is None:
             return
-        if self.data_model.table_class == ElasticProperties:
-            dlg = Add_ElasticMaterial_Dlg(
+        if self.data_model.table_class in TABLE_DIALOGS_DICT:
+            dlg = TABLE_DIALOGS_DICT[self.data_model.table_class](
                 parent=self,
                 session=self.session
             )
             dlg.exec()
             if dlg.result():
-                self.data_model.records.append(dlg.material.as_data_record)
+                self.data_model.records.append(dlg.instance.as_data_record)
                 self.data_model.layoutChanged.emit()
-            return
-        if self.data_model.table_class == Striker:
-            dlg = Add_Striker_Dlg(
-                parent=self,
-                session=self.session
-            )
-            dlg.exec()
-            if dlg.result():
-                self.data_model.records.append(dlg.striker.as_data_record)
-                self.data_model.layoutChanged.emit()
-            return
-        if self.data_model.table_class == MeasureBar:
-            dlg = Add_Bar_Dlg(
-                parent=self,
-                session=self.session
-            )
-            dlg.exec()
-            if dlg.result():
-                self.data_model.records.append(dlg.bar.as_data_record)
-                self.data_model.layoutChanged.emit()
-            return
-        if self.data_model.table_class == Jacket:
-            dlg = Add_Jacket_Dlg(
-                parent=self,
-                session=self.session
-            )
-            dlg.exec()
-            if dlg.result():
-                self.data_model.records.append(dlg.jacket.as_data_record)
-                self.data_model.layoutChanged.emit()
-            return
 
     @pqc.Slot()
     def edit_table_record(self):
@@ -182,51 +169,17 @@ class AppMainWindow(Ui_dynaexp_main_window, pqw.QMainWindow):
         rec = self.session.query(self.data_model.table_class).where(
             self.data_model.table_class.id == rec_id
         ).one()
-        if self.data_model.table_class == ElasticProperties:
-            dlg = Add_ElasticMaterial_Dlg(
+        if self.data_model.table_class in TABLE_DIALOGS_DICT:
+            dlg = TABLE_DIALOGS_DICT[self.data_model.table_class](
                 parent=self,
                 session=self.session,
-                material=rec,
+                instance=rec,
             )
             dlg.exec()
             if dlg.result():
-                self.data_model.records[row_num] = dlg.material.as_data_record
+                self.data_model.records[row_num] = dlg.instance.as_data_record
                 self.data_model.layoutChanged.emit()
             return
-        if self.data_model.table_class == Striker:
-            dlg = Add_Striker_Dlg(
-                parent=self,
-                session=self.session,
-                striker=rec,
-            )
-            dlg.exec()
-            if dlg.result():
-                self.data_model.records[row_num] = dlg.striker.as_data_record
-                self.data_model.layoutChanged.emit()
-            return
-        if self.data_model.table_class == MeasureBar:
-            dlg = Add_Bar_Dlg(
-                parent=self,
-                session=self.session,
-                bar=rec,
-            )
-            dlg.exec()
-            if dlg.result():
-                self.data_model.records[row_num] = dlg.bar.as_data_record
-                self.data_model.layoutChanged.emit()
-            return
-        if self.data_model.table_class == Jacket:
-            dlg = Add_Jacket_Dlg(
-                parent=self,
-                session=self.session,
-                jacket=rec,
-            )
-            dlg.exec()
-            if dlg.result():
-                self.data_model.records[row_num] = dlg.jacket.as_data_record
-                self.data_model.layoutChanged.emit()
-            return
-
 
 if __name__ == '__main__':
     app = pqw.QApplication([])
